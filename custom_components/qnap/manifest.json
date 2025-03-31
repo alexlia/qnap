@@ -6,6 +6,6 @@
   "documentation": "https://www.home-assistant.io/integrations/qnap",
   "integration_type": "device",
   "iot_class": "local_polling",
-  "requirements": ["qnapstats==0.4.0"],
+  "requirements": ["https://github.com/alexlia/python-qnapstats"],
   "version": "10.0"
 }
