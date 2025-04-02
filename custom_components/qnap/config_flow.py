@@ -25,6 +25,7 @@ from .const import (
     CONF_DRIVES,
     CONF_NICS,
     CONF_VOLUMES,
+    CONF_SYSFANS,
     DEFAULT_PORT,
     DEFAULT_SSL,
     DEFAULT_TIMEOUT,
@@ -57,6 +58,7 @@ class QnapConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         import_info.pop(CONF_NICS, None)
         import_info.pop(CONF_DRIVES, None)
         import_info.pop(CONF_VOLUMES, None)
+        import_info.pop(CONF_SYSFANS, None)
         return await self.async_step_user(import_info)
 
     async def async_step_user(

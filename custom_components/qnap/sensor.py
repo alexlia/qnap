@@ -41,6 +41,7 @@ from .const import (
     CONF_DRIVES,
     CONF_NICS,
     CONF_VOLUMES,
+    CONF_SYSFANS,
     DEFAULT_PORT,
     DEFAULT_TIMEOUT,
     DOMAIN,
@@ -149,6 +150,15 @@ _NETWORK_MON_COND: tuple[SensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
     ),
 )
+_SYSFAN_MON_COND: tuple[SensorEntityDescription, ...] = (
+    SensorEntityDescription(
+        key="system_fan_speed",
+        name="System fan speed",
+        icon="mdi:fan",
+        state_class=SensorStateClass.MEASUREMENT,
+    ),
+)
+
 _DRIVE_MON_COND: tuple[SensorEntityDescription, ...] = (
     SensorEntityDescription(
         key="drive_smart_status",
@@ -201,6 +211,7 @@ SENSOR_KEYS: list[str] = [
         *_CPU_MON_COND,
         *_MEMORY_MON_COND,
         *_NETWORK_MON_COND,
+        *_SYSFAN_MON_COND,
         *_DRIVE_MON_COND,
         *_VOLUME_MON_COND,
     )
@@ -219,6 +230,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
             cv.ensure_list, [vol.In(SENSOR_KEYS)]
         ),
         vol.Optional(CONF_NICS): cv.ensure_list,
+        vol.Optional(CONF_SYSFANS): cv.ensure_list,
         vol.Optional(CONF_DRIVES): cv.ensure_list,
         vol.Optional(CONF_VOLUMES): cv.ensure_list,
     }
@@ -288,6 +300,15 @@ async def async_setup_entry(
             QNAPNetworkSensor(coordinator, description, uid, nic)
             for nic in coordinator.data["system_stats"]["nics"]
             for description in _NETWORK_MON_COND
+        ]
+    )
+
+    # Sysfan sensors
+    sensors.extend(
+        [
+            QNAPSysfanSensor(coordinator, description, uid, sysfan)
+            for sysfan in coordinator.data["system_stats"]["sysfans"]
+            for description in _SYSFAN_MON_COND
         ]
     )
 
@@ -427,6 +448,16 @@ class QNAPNetworkSensor(QNAPSensor):
                 ATTR_PACKETS_ERR: data["err_packets"],
             }
 
+class QNAPSysfanSensor(QNAPSensor):
+    """A QNAP sensor that monitors system fans."""
+
+    @property
+    def native_value(self):
+        """Return the state of the sensor."""
+        if self.entity_description.key == "system_fan_speed":
+            sysfan = self.coordinator.data["system_stats"]["sysfans"][self.monitor_device]
+            return sysfan["speed"]    
+    
 
 class QNAPSystemSensor(QNAPSensor):
     """A QNAP sensor that monitors overall system health."""
