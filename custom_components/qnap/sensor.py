@@ -153,7 +153,7 @@ _NETWORK_MON_COND: tuple[SensorEntityDescription, ...] = (
 _SYSFAN_MON_COND: tuple[SensorEntityDescription, ...] = (
     SensorEntityDescription(
         key="system_fan_speed",
-        name="System fan speed",
+        name="System Fan Speed",
         icon="mdi:fan",
         state_class=SensorStateClass.MEASUREMENT,
     ),
