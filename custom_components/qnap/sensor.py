@@ -24,6 +24,7 @@ from homeassistant.const import (
     CONF_USERNAME,
     CONF_VERIFY_SSL,
     PERCENTAGE,
+    REVOLUTIONS_PER_MINUTE,
     UnitOfDataRate,
     UnitOfInformation,
     UnitOfTemperature,
