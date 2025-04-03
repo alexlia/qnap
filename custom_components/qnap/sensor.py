@@ -156,6 +156,7 @@ _SYSFAN_MON_COND: tuple[SensorEntityDescription, ...] = (
         key="system_fan_alert",
         name="System Fan Alert",
         icon="mdi:fan-alert",
+        entity_registry_enabled_default=False,
     ),    
     SensorEntityDescription(
         key="system_fan_speed",
@@ -163,6 +164,7 @@ _SYSFAN_MON_COND: tuple[SensorEntityDescription, ...] = (
         icon="mdi:fan",
         native_unit_of_measurement=REVOLUTIONS_PER_MINUTE,
         state_class=SensorStateClass.MEASUREMENT,
+        entity_registry_enabled_default=False,
     ),
 )
 
