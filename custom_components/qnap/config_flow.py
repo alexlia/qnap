@@ -17,6 +17,7 @@ from homeassistant.const import (
     CONF_SSL,
     CONF_USERNAME,
     CONF_VERIFY_SSL,
+    CONF_TIMEOUT,
 )
 from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers import config_validation as cv
@@ -41,6 +42,7 @@ DATA_SCHEMA = vol.Schema(
         vol.Optional(CONF_SSL, default=DEFAULT_SSL): cv.boolean,
         vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): cv.boolean,
         vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
+        vol.Optional(CONF_TIMEOUT, default=DEFAULT_TIMEOUT): cv.timeout,
     }
 )
 
@@ -76,7 +78,7 @@ class QnapConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 username=user_input[CONF_USERNAME],
                 password=user_input[CONF_PASSWORD],
                 verify_ssl=user_input[CONF_VERIFY_SSL],
-                timeout=DEFAULT_TIMEOUT,
+                timeout=user_input[CONF_TIMEOUT],
             )
             try:
                 stats = await self.hass.async_add_executor_job(api.get_system_stats)
