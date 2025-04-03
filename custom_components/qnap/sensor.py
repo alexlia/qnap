@@ -152,9 +152,15 @@ _NETWORK_MON_COND: tuple[SensorEntityDescription, ...] = (
 )
 _SYSFAN_MON_COND: tuple[SensorEntityDescription, ...] = (
     SensorEntityDescription(
+        key="system_fan_alert",
+        name="System Fan Alert",
+        icon="mdi:fan-alert",
+    ),    
+    SensorEntityDescription(
         key="system_fan_speed",
         name="System Fan Speed",
         icon="mdi:fan",
+        native_unit_of_measurement=REVOLUTIONS_PER_MINUTE,
         state_class=SensorStateClass.MEASUREMENT,
     ),
 )
@@ -456,7 +462,10 @@ class QNAPSysfanSensor(QNAPSensor):
         """Return the state of the sensor."""
         if self.entity_description.key == "system_fan_speed":
             sysfan = self.coordinator.data["system_stats"]["sysfans"][self.monitor_device]
-            return sysfan["speed"]    
+            return sysfan["speed"]   
+        if self.entity_description.key == "system_fan_alert":
+            sysfan = self.coordinator.data["system_stats"]["sysfans"][self.monitor_device]
+            return sysfan["status"]             
     
 
 class QNAPSystemSensor(QNAPSensor):
